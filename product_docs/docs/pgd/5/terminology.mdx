@@ -91,7 +91,7 @@ Traditionally, in PostgreSQL, a number of databases running on a single server i
 
 #### Quorum
 
-When a [Raft](#Raft) [consensus](#consensus) is needed by a PGD cluster, there needs to be  a minimum number of voting nodes participating in the vote. This number is called a quorum. For example, with a 5 node cluster, the quorum would be 3 nodes in the cluster voting. A consensus would be 5/2+1 nodes, 3 nodes voting the same way. If there were only 2 voting nodes, then a consensus would never be established.
+When a [Raft](#raft) [consensus](#consensus) is needed by a PGD cluster, there needs to be  a minimum number of voting nodes participating in the vote. This number is called a quorum. For example, with a 5 node cluster, the quorum would be 3 nodes in the cluster voting. A consensus would be 5/2+1 nodes, 3 nodes voting the same way. If there were only 2 voting nodes, then a consensus would never be established.
 
 #### Raft
 
