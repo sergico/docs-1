@@ -22,7 +22,7 @@ As data is replicated across the nodes of a PGD cluster, there might be occasion
 
 #### Consensus
 
-How [Raft](#raft) makes group-wide decisions. Given a number of nodes in a group, Raft looks for a consensus of the majority (number of nodes divided by 2 plus 1) voting for a decision. For example, when a write leader is being selected, a Raft consensus is sought over which node in the group will be the write leader. Consensus can be reached only if there's a quorum of voting members.
+How [Raft](#replicated-available-fault-tolerance-raft) makes group-wide decisions. Given a number of nodes in a group, Raft looks for a consensus of the majority (number of nodes divided by 2 plus 1) voting for a decision. For example, when a write leader is being selected, a Raft consensus is sought over which node in the group will be the write leader. Consensus can be reached only if there's a quorum of voting members.
 
 #### Cluster
 
@@ -88,7 +88,7 @@ Traditionally, in PostgreSQL, a number of databases running on a single server i
 
 #### Quorum
 
-When a [Raft](#raft) [consensus](#consensus) is needed by a PGD cluster, there needs to be a minimum number of voting nodes participating in the vote. This number is called a quorum. For example, with a 5 node cluster, the quorum would be 3 nodes in the cluster voting. A consensus would be 5/2+1 nodes, 3 nodes voting the same way. If there were only 2 voting nodes, then a consensus would never be established.
+When a [Raft](#replicated-available-fault-tolerance-raft) [consensus](#consensus) is needed by a PGD cluster, a minimum number of voting nodes participating in the vote are needed. This number is called a quorum. For example, with a 5-node cluster, the quorum is 3 nodes in the cluster voting. A consensus is 5/2+1 nodes, 3 nodes voting the same way. If there are only 2 voting nodes, then a consensus is never established.
 
 #### Replicated available fault tolerance (Raft)
 
@@ -112,8 +112,15 @@ A PGD cluster is based around bidirectional replication. But in some use cases, 
 
 #### Two-phase commit (2PC)
 
-A multi-step process for achieving consistency across multiple database nodes. The first phase sees a transaction prepared on an originating node and sent to all participating nodes. Each participating node validates that it can apply the transaction and 
-signals its readiness to the originating node. This is the precommit or prepare phase. In the second phase, if all the participating nodes signal they're ready, the originating node proceeds to commit the transaction and signals the participating nodes to commit, too. This is the commit phase. If, in the precommit phase, any node signals it isn't ready, the entire transaction is aborted. This process ensures all nodes get the same changes.
+A multi-step process for achieving consistency across multiple database nodes.
+The first phase sees a transaction prepared on an originating node and sent to
+all participating nodes. Each participating node validates that it can apply the
+transaction and signals its readiness to the originating node. This is the
+prepare phase. In the second phase, if all the participating nodes signal they
+are ready, the originating node proceeds to commit the transaction and signals
+the participating nodes to commit, too. This is the commit phase. If, in the
+prepare phase, any node signals it is not ready, the entire transaction is
+aborted. It's this process that ensures all nodes get the same changes.
 
 #### Vertical scaling or scale up
 
